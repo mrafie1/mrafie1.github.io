@@ -1,0 +1,118 @@
+---
+interface Props {
+  name: string;
+  lined?: boolean;
+}
+
+const { name, lined = false } = Astro.props;
+---
+
+<div class="card">
+  <div class="card-header">
+    <span class="icon"></span>
+    <span class="title">{name}</span>
+  </div>
+
+  <div class:list={["card-body", { lined }]}>
+    <slot />
+  </div>
+</div>
+
+<style>
+  .card {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: var(--DarkGreenBG);
+    border: 1px solid var(--BorderDark);
+    box-shadow:
+      inset 1px 1px 0 var(--BorderBright),
+      inset -1px -1px 0 var(--BorderDark);
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    background-color: var(--GreenBG);
+    border-bottom: 1px solid var(--BorderDark);
+    box-shadow:
+      inset 1px 1px 0 rgba(216, 222, 211, 0.2),
+      inset -1px -1px 0 rgba(40, 46, 34, 0.7);
+  }
+
+  .icon {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    background-color: var(--Maize);
+    border: 1px solid var(--BorderDark);
+    box-shadow:
+      inset 1px 1px 0 var(--OffWhite),
+      inset -1px -1px 0 var(--MaizeBG);
+  }
+
+  .title {
+    color: var(--OffWhite);
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .card-body {
+    padding: 0;
+    background-color: var(--DarkGreenBG);
+    color: var(--OffWhite);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .card-body :global(p) {
+    margin: 0;
+    padding: 12px;
+  }
+
+  .card-body.lined > :global(*) {
+    margin: 0;
+    padding: 12px;
+    border-bottom: 1px solid #1f251b;
+    box-shadow: none;
+  }
+
+  .card-body.lined > :global(*:last-child) {
+    border-bottom: none;
+    box-shadow: none;
+  }
+
+  .card-body :global(h2) {
+    margin: 0;
+    padding: 12px;
+    color: var(--OffWhite);
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .card-line {
+    height: 1px;
+    margin: 10px 0;
+    border: 0;
+    background-color: var(--BorderDark);
+    box-shadow: 0 1px 0 rgba(128, 128, 128, 0.35);
+  }
+
+  .card-label {
+    color: var(--Label);
+    font-size: 13px;
+    font-weight: bold;
+  }
+
+  .card-muted {
+    color: var(--DimListText);
+  }
+  .dotted-divider {
+    border: 0;
+    border-top: 1px dotted #808080;
+    margin: 0.75rem 0;
+  }
+</style>

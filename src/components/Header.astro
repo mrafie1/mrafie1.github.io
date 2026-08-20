@@ -1,0 +1,56 @@
+<header>
+  <nav>
+    <a href="/" class="button-link">HOME</a>
+    <a href="/projects" class="button-link">PROJECTS</a>
+    <a href="/blog/" class="button-link">BLOG</a>
+  </nav>
+</header>
+
+<style>
+  header {
+    display: flex;
+    justify-content: center;
+    padding-top: 5.5rem;
+  }
+
+  nav {
+    display: flex;
+    gap: 16px;
+    padding: 4px;
+    background: var(--GreenBG);
+    border: 1px solid var(--BorderBright);
+    box-shadow:
+      inset 1px 1px 0 rgba(255, 255, 255, 0.15),
+      inset -1px -1px 0 rgba(0, 0, 0, 0.5);
+  }
+
+  .button-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 42px;
+    padding: 0 20px;
+    background: var(--GreenBG);
+    border: 1px solid var(--BorderBright);
+    box-shadow:
+      inset 1px 1px 0 rgba(255, 255, 255, 0.25),
+      inset -1px -1px 0 rgba(0, 0, 0, 0.5);
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    transition: all 0.1s ease;
+  }
+
+  .button-link:hover {
+    background: var(--LightGreenBG);
+    color: #ffffff;
+  }
+
+  .button-link:active {
+    background: var(--DarkGreenBG);
+    box-shadow:
+      inset 1px 1px 0 rgba(0, 0, 0, 0.5),
+      inset -1px -1px 0 rgba(255, 255, 255, 0.15);
+  }
+</style>

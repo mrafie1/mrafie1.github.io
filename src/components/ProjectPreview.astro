@@ -1,0 +1,505 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  id: string;
+  title: string;
+  image?: ImageMetadata;
+  description: string;
+  technologies?: string[];
+  github?: string;
+  demo?: string;
+}
+
+const {
+  id,
+  title,
+  image,
+  description,
+  technologies = [],
+  github,
+  demo,
+} = Astro.props;
+---
+
+<div
+  class="project-preview"
+  data-project-preview={id}
+  aria-hidden="true"
+>
+  <div class="preview-backdrop"></div>
+
+  <div
+    class="preview-window"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby={`project-title-${id}`}
+  >
+    <div class="preview-header">
+      <div class="preview-title">
+        <span class="title-icon"></span>
+
+        <span id={`project-title-${id}`}>
+          {title}
+        </span>
+      </div>
+
+      <button
+        class="close-button"
+        type="button"
+        data-close-preview
+        aria-label="Close project"
+      >
+        ×
+      </button>
+    </div>
+
+    <div class="preview-body">
+      <div class="preview-main">
+        <div class="preview-image">
+          {image && (
+            <Image
+              src={image}
+              alt={title}
+            />
+          )}
+        </div>
+
+        <div class="preview-content">
+          <h2>{title}</h2>
+
+          <p class="description">
+            {description}
+          </p>
+
+          {technologies.length > 0 && (
+            <div class="technology-section">
+              <div class="section-label">
+                TECHNOLOGIES
+              </div>
+
+              <div class="technologies">
+                {technologies.map((technology) => (
+                  <span class="technology">
+                    {technology}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div class="preview-actions">
+            {demo && (
+              <a
+                class="action-button primary"
+                href={demo}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                VIEW PROJECT
+              </a>
+            )}
+
+            {github && (
+              <a
+                class="action-button"
+                href={github}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GITHUB
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-divider"></div>
+
+      <div class="preview-extra">
+        <slot />
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const previews = document.querySelectorAll<HTMLElement>(
+    "[data-project-preview]"
+  );
+
+  function closePreview(preview: HTMLElement) {
+    preview.classList.remove("open");
+    preview.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("project-preview-open");
+  }
+
+  previews.forEach((preview) => {
+    const backdrop = preview.querySelector(".preview-backdrop");
+    const closeButton = preview.querySelector(
+      "[data-close-preview]"
+    );
+
+    closeButton?.addEventListener("click", () => {
+      closePreview(preview);
+    });
+
+    backdrop?.addEventListener("click", () => {
+      closePreview(preview);
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+
+    const openPreview = document.querySelector<HTMLElement>(
+      ".project-preview.open"
+    );
+
+    if (openPreview) {
+      closePreview(openPreview);
+    }
+  });
+
+  document.addEventListener("open-project-preview", ((event: Event) => {
+    const customEvent = event as CustomEvent;
+
+    const id = customEvent.detail?.id;
+
+    if (!id) return;
+
+    const preview = document.querySelector<HTMLElement>(
+      `[data-project-preview="${id}"]`
+    );
+
+    if (!preview) return;
+
+    preview.classList.add("open");
+    preview.setAttribute("aria-hidden", "false");
+
+    document.body.classList.add("project-preview-open");
+  }) as EventListener);
+</script>
+
+<style>
+  .project-preview {
+    position: fixed;
+    inset: 0;
+
+    z-index: 1000;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+  }
+
+  .project-preview.open {
+    display: flex;
+  }
+
+  .preview-backdrop {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(10, 14, 9, 0.78);
+  }
+
+  .preview-window {
+    position: relative;
+
+    width: min(850px, 100%);
+    max-height: min(700px, 90vh);
+
+    overflow: hidden;
+
+    background-color: var(--DarkGreenBG);
+
+    border: 1px solid var(--BorderDark);
+
+    box-shadow:
+      inset 1px 1px 0 var(--BorderBright),
+      inset -1px -1px 0 var(--BorderDark),
+      0 10px 35px rgba(0, 0, 0, 0.55);
+
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    min-height: 34px;
+    box-sizing: border-box;
+
+    padding: 5px 6px 5px 10px;
+
+    background-color: var(--GreenBG);
+
+    border-bottom: 1px solid var(--BorderDark);
+
+    box-shadow:
+      inset 1px 1px 0 rgba(216, 222, 211, 0.2),
+      inset -1px -1px 0 rgba(40, 46, 34, 0.7);
+  }
+
+  .preview-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    color: var(--OffWhite);
+
+    font-size: 13px;
+    font-weight: bold;
+
+    text-transform: uppercase;
+  }
+
+  .title-icon {
+    display: inline-block;
+
+    width: 7px;
+    height: 7px;
+
+    background-color: var(--Maize);
+
+    border: 1px solid var(--BorderDark);
+
+    box-shadow:
+      inset 1px 1px 0 var(--OffWhite),
+      inset -1px -1px 0 var(--MaizeBG);
+  }
+
+  .close-button {
+    width: 22px;
+    height: 21px;
+
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: var(--DarkGreenBG);
+    color: var(--OffWhite);
+
+    border: 1px solid var(--BorderDark);
+
+    box-shadow:
+      inset 1px 1px 0 var(--BorderBright),
+      inset -1px -1px 0 var(--BorderDark);
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 17px;
+    line-height: 1;
+
+    cursor: pointer;
+  }
+
+  .close-button:hover {
+    background-color: var(--LightGreenBG);
+  }
+
+  .close-button:active {
+    box-shadow:
+      inset 1px 1px 0 var(--BorderDark),
+      inset -1px -1px 0 var(--BorderBright);
+
+    transform: translate(1px, 1px);
+  }
+
+  .preview-body {
+    max-height: calc(90vh - 34px);
+    overflow-y: auto;
+
+    padding: 14px;
+
+    color: var(--OffWhite);
+  }
+
+  .preview-main {
+    display: grid;
+    grid-template-columns: minmax(300px, 1.15fr) minmax(250px, 0.85fr);
+    gap: 16px;
+  }
+
+  .preview-image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+
+    overflow: hidden;
+
+    background-color: #252b20;
+
+    border: 1px solid var(--BorderDark);
+
+    box-shadow:
+      inset 1px 1px 0 rgba(0, 0, 0, 0.35),
+      inset -1px -1px 0 rgba(216, 222, 211, 0.08);
+  }
+
+  .preview-image img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+  }
+
+  .preview-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .preview-content h2 {
+    margin: 0 0 10px;
+
+    color: var(--OffWhite);
+
+    font-size: 20px;
+    line-height: 1.2;
+  }
+
+  .description {
+    margin: 0;
+
+    color: var(--OffWhite);
+
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .technology-section {
+    margin-top: 18px;
+  }
+
+  .section-label {
+    margin-bottom: 7px;
+
+    color: var(--Label);
+
+    font-size: 11px;
+    font-weight: bold;
+
+    letter-spacing: 0.5px;
+  }
+
+  .technologies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .technology {
+    padding: 4px 7px;
+
+    background-color: var(--GreenBG);
+
+    border: 1px solid var(--BorderDark);
+
+    box-shadow:
+      inset 1px 1px 0 rgba(216, 222, 211, 0.08),
+      inset -1px -1px 0 rgba(40, 46, 34, 0.5);
+
+    color: var(--OffWhite);
+
+    font-size: 11px;
+  }
+
+  .preview-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+
+    margin-top: auto;
+    padding-top: 22px;
+  }
+
+  .action-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 28px;
+
+    box-sizing: border-box;
+
+    padding: 5px 12px;
+
+    background-color: var(--DarkGreenBG);
+    color: var(--OffWhite);
+
+    border: 1px solid var(--BorderDark);
+
+    box-shadow:
+      inset 1px 1px 0 var(--BorderBright),
+      inset -1px -1px 0 var(--BorderDark);
+
+    font-size: 12px;
+    font-weight: bold;
+
+    text-decoration: none;
+
+    cursor: pointer;
+  }
+
+  .action-button:hover {
+    background-color: var(--LightGreenBG);
+  }
+
+  .action-button:active {
+    box-shadow:
+      inset 1px 1px 0 var(--BorderDark),
+      inset -1px -1px 0 var(--BorderBright);
+
+    transform: translate(1px, 1px);
+  }
+
+  .action-button.primary {
+    background-color: var(--MaizeBG);
+    color: var(--OffWhite);
+  }
+
+  .action-button.primary:hover {
+    background-color: var(--Maize);
+  }
+
+  .preview-divider {
+    height: 1px;
+
+    margin: 16px 0;
+
+    background-color: #1f251b;
+  }
+
+  .preview-extra {
+    color: var(--OffWhite);
+
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 700px) {
+    .project-preview {
+      padding: 10px;
+    }
+
+    .preview-main {
+      grid-template-columns: 1fr;
+    }
+
+    .preview-window {
+      max-height: 95vh;
+    }
+
+    .preview-body {
+      max-height: calc(95vh - 34px);
+    }
+  }
+</style>

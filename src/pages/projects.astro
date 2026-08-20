@@ -1,0 +1,45 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import SingletonProject from '../components/SingletonProject.astro';
+import ProjectPreview from '../components/ProjectPreview.astro';
+import { getCollection } from 'astro:content';
+
+const allProjects = await getCollection('project');
+
+const projectOrder = [
+  'project-four',
+  'project-two',
+  'project-three',
+  'project-five',
+  'project-one',
+];
+
+const sortedProjects = allProjects.sort(
+  (a, b) => projectOrder.indexOf(a.id) - projectOrder.indexOf(b.id)
+);
+---
+
+<Layout title="projects">
+  <ProjectCard title="my work">
+    {sortedProjects.map((project) => (
+      <SingletonProject
+        id={project.id}
+        title={project.data.title}
+        image={project.data.image}
+      />
+    ))}
+  </ProjectCard>
+
+  {sortedProjects.map((project) => (
+    <ProjectPreview
+      id={project.id}
+      title={project.data.title}
+      image={project.data.image}
+      description={project.data.description}
+      technologies={project.data.tech}
+      github={project.data.githublink}
+      demo={project.data.projectlink}
+    />
+  ))}
+</Layout>

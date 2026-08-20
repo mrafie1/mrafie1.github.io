@@ -1,0 +1,440 @@
+---
+const { frontmatter } = Astro.props;
+---
+
+<main class="blog">
+  <header class="blog-header">
+    <h1>{frontmatter.title}</h1>
+
+    <div class="meta">
+      <span class="date">
+        {
+          frontmatter.pubDate.toLocaleDateString("en-CA", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })
+        }
+      </span>
+
+      {
+        frontmatter.tags && frontmatter.tags.length > 0 && (
+          <div class="tags">
+            {frontmatter.tags.map((tag) => (
+              <span>#{tag}</span>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </header>
+
+  <div class="dotted-divider"></div>
+
+  <article class="content">
+    <slot />
+  </article>
+</main>
+
+<style>
+  .blog {
+    width: min(90%, 700px);
+    margin: 0 auto;
+    padding: 2rem 0;
+    color: var(--OffWhite);
+  }
+  .blog-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+
+    gap: 2rem;
+
+    padding: 0.75rem 0;
+  }
+
+  .blog-header h1 {
+    margin: 0;
+
+    color: var(--OffWhite);
+
+    font-size: 2.2rem;
+    font-weight: bold;
+    line-height: 1.2;
+
+    text-align: left;
+  }
+
+  .meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    gap: 0.5rem;
+
+    color: var(--Label);
+
+    font-size: 0.8rem;
+
+    text-align: right;
+  }
+
+  .date {
+    color: var(--Label);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+
+    gap: 0.4rem;
+
+    color: var(--Maize);
+  }
+
+  .tags span {
+    padding: 3px 6px;
+
+    background-color: var(--GreenBG);
+
+    border: 1px solid var(--BorderDark);
+
+    box-shadow:
+      inset 1px 1px 0 rgba(216, 222, 211, 0.08),
+      inset -1px -1px 0 rgba(40, 46, 34, 0.5);
+
+    font-size: 11px;
+  }
+
+  .description {
+    max-width: 600px;
+
+    margin: 0.75rem auto 0;
+
+    color: var(--Label);
+
+    line-height: 1.6;
+  }
+
+  /* ─────────────────────────────
+     Header divider
+     ───────────────────────────── */
+
+  .dotted-divider {
+    width: 100%;
+    height: 1px;
+
+    margin: 1rem 0;
+
+    background-image: radial-gradient(
+      circle,
+      var(--BorderBright) 1px,
+      transparent 1px
+    );
+
+    background-size: 4px 1px;
+    background-repeat: repeat-x;
+  }
+
+  /* ─────────────────────────────
+     Article content
+     ───────────────────────────── */
+
+  .content {
+    color: var(--OffWhite);
+
+    line-height: 1.7;
+  }
+
+  .content :global(p) {
+    margin: 1rem 0;
+  }
+
+  .content :global(h2),
+  .content :global(h3),
+  .content :global(h4) {
+    color: var(--OffWhite);
+
+    line-height: 1.4;
+  }
+
+  .content :global(h2) {
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.4rem;
+  }
+
+  .content :global(h3) {
+    margin-top: 1.5rem;
+  }
+
+  /* ─────────────────────────────
+     Links
+     ───────────────────────────── */
+
+  .content :global(a) {
+    color: var(--Maize);
+
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 3px;
+  }
+
+  .content :global(a:hover) {
+    color: var(--FullGreen);
+  }
+
+  /* ─────────────────────────────
+     Lists
+     ───────────────────────────── */
+
+  .content :global(ul),
+  .content :global(ol) {
+    padding-left: 1.5rem;
+  }
+
+  .content :global(li) {
+    margin: 0.4rem 0;
+  }
+
+  /* ─────────────────────────────
+     Blockquotes
+     ───────────────────────────── */
+
+  .content :global(blockquote) {
+    margin: 1.5rem 0;
+    padding: 0.25rem 1rem;
+
+    border-left: 2px solid var(--Maize);
+
+    color: var(--Label);
+  }
+
+  /* ─────────────────────────────
+     Inline code
+     ───────────────────────────── */
+
+  .content :global(code) {
+    padding: 0.15rem 0.3rem;
+
+    background: var(--BorderDark);
+
+    color: var(--Maize);
+
+    font-family: "Courier New", Courier, monospace;
+  }
+
+  /* ─────────────────────────────
+     Code blocks
+     ───────────────────────────── */
+
+  .content :global(pre) {
+    position: relative;
+
+    overflow-x: auto;
+
+    width: 100%;
+    box-sizing: border-box;
+
+    margin: 1.5rem 0;
+
+    /*
+     * Space for the retro window header.
+     */
+    padding: 44px 12px 12px;
+
+    background-color: var(--DarkGreenBG) !important;
+
+    border: 1px solid var(--BorderDark);
+
+    box-shadow:
+      inset 1px 1px 0 var(--BorderBright),
+      inset -1px -1px 0 var(--BorderDark);
+
+    color: var(--OffWhite) !important;
+
+    font-family: "Courier New", Courier, monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  /*
+   * Retro code window header.
+   */
+  .content :global(pre)::before {
+    content: "CODE";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    display: flex;
+    align-items: center;
+
+    box-sizing: border-box;
+
+    height: 32px;
+
+    padding: 7px 10px 7px 25px;
+
+    background-color: var(--GreenBG);
+
+    border-bottom: 1px solid var(--BorderDark);
+
+    box-shadow:
+      inset 1px 1px 0 rgba(216, 222, 211, 0.2),
+      inset -1px -1px 0 rgba(40, 46, 34, 0.7);
+
+    color: var(--OffWhite);
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+
+    text-transform: uppercase;
+  }
+
+  /*
+   * Small maize square from your Card component.
+   */
+  .content :global(pre)::after {
+    content: "";
+
+    position: absolute;
+
+    top: 11px;
+    left: 10px;
+
+    width: 7px;
+    height: 7px;
+
+    box-sizing: border-box;
+
+    background-color: var(--Maize);
+
+    border: 1px solid var(--BorderDark);
+
+    box-shadow:
+      inset 1px 1px 0 var(--OffWhite),
+      inset -1px -1px 0 var(--MaizeBG);
+  }
+
+  /*
+   * Actual code inside the window.
+   */
+  .content :global(pre code) {
+    display: block;
+
+    margin: 0;
+    padding: 0 !important;
+
+    background: transparent !important;
+
+    border: 0;
+
+    color: var(--OffWhite) !important;
+
+    font-family: "Courier New", Courier, monospace;
+    font-size: inherit;
+    line-height: inherit;
+  }
+
+  /*
+   * Astro/Shiki syntax highlighting can add
+   * backgrounds to individual spans.
+   */
+  .content :global(pre span) {
+    background: transparent !important;
+  }
+
+  /* ─────────────────────────────
+     Images
+     ───────────────────────────── */
+
+  .content :global(img) {
+    display: block;
+
+    max-width: 100%;
+    height: auto;
+
+    margin: 1.5rem auto;
+  }
+
+  /* ─────────────────────────────
+     Horizontal rules
+     ───────────────────────────── */
+
+  .content :global(hr) {
+    border: 0;
+    border-top: 1px dotted var(--BorderBright);
+
+    margin: 2rem 0;
+  }
+
+  /* ─────────────────────────────
+     Tables
+     ───────────────────────────── */
+
+  .content :global(table) {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    margin: 1.5rem 0;
+  }
+
+  .content :global(th),
+  .content :global(td) {
+    padding: 0.5rem;
+
+    border: 1px solid var(--BorderBright);
+
+    text-align: left;
+  }
+
+  .content :global(th) {
+    background: var(--GreenBG);
+    color: var(--Maize);
+  }
+
+  .content :global(td) {
+    color: var(--OffWhite);
+  }
+
+  /* ─────────────────────────────
+     Mobile
+     ───────────────────────────── */
+
+  @media (max-width: 600px) {
+    .blog {
+      width: 90%;
+      padding: 1.5rem 0;
+    }
+
+    .blog-header {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .blog-header h1 {
+      font-size: 1.8rem;
+      text-align: left;
+    }
+
+    .meta {
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .tags {
+      justify-content: flex-start;
+    }
+
+    .content :global(pre) {
+      font-size: 0.8rem;
+    }
+  }
+</style>

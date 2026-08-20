@@ -1,0 +1,148 @@
+<div class="badges">
+  <!-- Top row: moves right -->
+  <div class="badges-window">
+    <div class="badges-track scroll-right">
+      <div class="badge-group">
+        <img src="/badges/2hu.gif" alt="" />
+        <img src="/badges/bad_apple.gif" alt="" />
+        <img src="/badges/aperture-laboratories.jpg" alt="" />
+        <img src="/badges/half-life.gif" alt="" />
+        <img src="/badges/mac-88x31.gif" alt="" />
+        <img src="/badges/windowsme.png" alt="" />
+        <img src="/badges/thirdimpact.png" alt="" />
+      </div>
+
+      <div class="badge-group" aria-hidden="true">
+        <img src="/badges/2hu.gif" alt="" />
+        <img src="/badges/bad_apple.gif" alt="" />
+        <img src="/badges/aperture-laboratories.jpg" alt="" />
+        <img src="/badges/half-life.gif" alt="" />
+        <img src="/badges/mac-88x31.gif" alt="" />
+        <img src="/badges/windowsme.png" alt="" />
+        <img src="/badges/thirdimpact.png" alt="" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom row: moves left -->
+  <div class="badges-window">
+    <div class="badges-track scroll-left">
+      <div class="badge-group">
+        <img src="/badges/csplayer.gif" />
+        <img src="/badges/discord-no-way.gif" />
+        <img src="/badges/godblessbutton1.gif" />
+        <img src="/badges/latex.gif" />
+        <img src="/badges/linux-directory.gif" />
+        <img src="/badges/miku.gif" />
+        <img src="/badges/upallnight.gif" />
+      </div>
+
+      <div class="badge-group" aria-hidden="true">
+        <img src="/badges/csplayer.gif" />
+        <img src="/badges/discord-no-way.gif" />
+        <img src="/badges/godblessbutton1.gif" />
+        <img src="/badges/latex.gif" />
+        <img src="/badges/linux-directory.gif" />
+        <img src="/badges/miku.gif" />
+        <img src="/badges/upallnight.gif" />
+      </div>
+    </div>
+  </div>
+  <hr class="dotted-divider" />
+</div>
+
+<style>
+  .badges {
+    width: min(90%, 700px);
+    margin: 12px auto 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .badges-window {
+    position: relative;
+    width: 100%;
+    height: 31px;
+    overflow: hidden;
+
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 8%,
+      black 92%,
+      transparent 100%
+    );
+
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 8%,
+      black 92%,
+      transparent 100%
+    );
+  }
+
+  .badges-track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+  }
+
+  .badge-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-right: 8px;
+    flex-shrink: 0;
+  }
+
+  .badge-group img {
+    display: block;
+    width: 88px;
+    height: 31px;
+    flex-shrink: 0;
+    image-rendering: pixelated;
+  }
+
+  /* Top row → */
+  .scroll-right {
+    animation: scroll-right 18s linear infinite;
+  }
+
+  .scroll-left {
+    animation: scroll-left 18s linear infinite;
+  }
+
+  .badges-window:hover .badges-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes scroll-right {
+    from {
+      transform: translateX(-50%);
+    }
+
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes scroll-left {
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .dotted-divider {
+    width: 100%;
+    border: 0;
+    border-top: 1px dotted #808080;
+    margin: 8px 0 0;
+  }
+</style>
