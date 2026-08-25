@@ -139,3 +139,5 @@ Me 2 months ago would've believed ML to be this super buzzwordy and boring field
 ML Systems / Deep Learning Systems Engineering seems more enticing to explore. I definitely want to explore recreating old and modern models from scratch, and studying how we can make operations that go into these things so much faster.
 
 This project took way too long and this blog post even longer, but I hope you enjoyed reading it!
+
+If you want to explore, take a look here: https://github.com/mrafie1/ml-frameworks
