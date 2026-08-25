@@ -1,5 +1,5 @@
 ---
-title: "My First Post"
+title: "First Post!"
 pubDate: 2026-08-19
 
 tags:
